@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subrogation Opportunity Scout — Pursuant Indemnity Mutual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #FAFAF9; color: #1F2937; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    #root { height: 100%; display: flex; flex-direction: column; }
+    input, textarea, select, button { font-family: inherit; font-size: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+    * { scrollbar-width: thin; scrollbar-color: #E5E7EB transparent; }
+    *::-webkit-scrollbar { width: 6px; height: 6px; }
+    *::-webkit-scrollbar-track { background: transparent; }
+    *::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="data.js"></script>
+  <script src="api.js"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="Queue.jsx"></script>
+  <script type="text/babel" src="ClaimDetail.jsx"></script>
+  <script type="text/babel" src="AuditLog.jsx"></script>
+  <script type="text/babel" src="ErrorStates.jsx"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [page, setPage]               = useState('queue');
+      const [selectedId, setSelectedId]   = useState(null);
+      // Seed from data.js globals so the UI renders even before (or without) the backend.
+      const [claims, setClaims]           = useState(window.CLAIMS);
+      const [auditLog, setAuditLog]       = useState(window.AUDIT_LOG_INIT);
+
+      // On mount, replace the seed with the backend's persisted state.
+      // If the backend is unreachable, we silently keep the data.js fallback.
+      useEffect(() => {
+        window.API.getState()
+          .then(s => { setClaims(s.claims); setAuditLog(s.auditLog); })
+          .catch(err => console.warn('Backend unavailable; using local seed data.', err));
+      }, []);
+
+      const openClaim = (id) => { setSelectedId(id); setPage('detail'); };
+      const goQueue   = ()   => { setPage('queue'); setSelectedId(null); };
+      const goAudit   = ()   => setPage('audit');
+      const goErrors  = ()   => setPage('errors');
+
+      const nowStamp = () => new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
+
+      // The backend already persisted the dropped claim; reconcile from it.
+      // If the backend is down (claim came from a local template), prepend locally.
+      const addClaim = (newClaim) => {
+        window.API.getState()
+          .then(s => { setClaims(s.claims); setAuditLog(s.auditLog); })
+          .catch(() => {
+            setClaims(prev => [newClaim, ...prev]);
+            const now = nowStamp();
+            setAuditLog(prev => [{
+              ts: now, claimId: newClaim.id, type: 'model_run',
+              modelVersion: 'claude-opus-4', reviewer: '',
+              action: window.ACTION_CONFIG[newClaim.action].label,
+              confidence: newClaim.confidence, notes: '',
+            }, {
+              ts: now, claimId: newClaim.id, type: 'claim_received',
+              modelVersion: '', reviewer: '', action: 'FNOL submitted', confidence: null, notes: '',
+            }, ...prev]);
+          });
+      };
+
+      const localDecisionLabel = (decision) =>
+        decision === 'confirmed' ? 'CONFIRMED — ROUTED TO DEMAND LETTER' :
+        decision === 'rejected'  ? 'REJECTED' :
+        decision === 'deferred'  ? 'DEFERRED FOR SENIOR REVIEW' : 'GATHER MORE INFO REQUESTED';
+
+      const handleAction = (claimId, notes, decision, reviewerName = 'Molly Shove') => {
+        window.API.action(claimId, decision, notes, reviewerName)
+          .then(res => {
+            setClaims(prev => prev.map(c => c.id === claimId ? res.claim : c));
+            setAuditLog(res.auditLog);
+          })
+          .catch(() => {
+            // Offline fallback: mutate locally so the demo still responds.
+            const now = nowStamp();
+            const label = localDecisionLabel(decision);
+            setClaims(prev => prev.map(c => c.id === claimId
+              ? { ...c, status: decision,
+                  auditTrail: [...c.auditTrail, { ts: now, type: 'reviewer_action', reviewer: reviewerName, decision: label, notes }] }
+              : c));
+            setAuditLog(prev => [{ ts: now, claimId, type: 'reviewer_action', modelVersion: '', reviewer: reviewerName, action: label, confidence: null, notes }, ...prev]);
+          });
+      };
+
+      const handleUndoAction = (claimId) => {
+        window.API.undo(claimId, 'Molly Shove')
+          .then(res => {
+            setClaims(prev => prev.map(c => c.id === claimId ? res.claim : c));
+            setAuditLog(res.auditLog);
+          })
+          .catch(() => {
+            const now = nowStamp();
+            setClaims(prev => prev.map(c => c.id === claimId
+              ? { ...c, status: 'pending',
+                  auditTrail: [...c.auditTrail, { ts: now, type: 'reviewer_action', reviewer: 'Molly Shove', decision: 'DECISION REVERSED — awaiting new assessment', notes: '' }] }
+              : c));
+            setAuditLog(prev => [{ ts: now, claimId, type: 'reviewer_action', modelVersion: '', reviewer: 'Molly Shove', action: 'DECISION REVERSED', confidence: null, notes: 'Reviewer changed assessment.' }, ...prev]);
+          });
+      };
+
+      const handleReset = () => {
+        window.API.reset()
+          .then(s => { setClaims(s.claims); setAuditLog(s.auditLog); setPage('queue'); setSelectedId(null); })
+          .catch(err => console.warn('Reset failed (backend unavailable).', err));
+      };
+
+      const selectedClaim = claims.find(c => c.id === selectedId);
+
+      return (
+        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <TopBar page={page} goQueue={goQueue} goAudit={goAudit} goErrors={goErrors} />
+          <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            {page === 'queue' && (
+              <QueuePage claims={claims} onOpenClaim={openClaim} onAddClaim={addClaim} onReset={handleReset} />
+            )}
+            {page === 'detail' && selectedClaim && (
+              <ClaimDetailPage claim={selectedClaim} onBack={goQueue} onAction={handleAction} onUndoAction={handleUndoAction} />
+            )}
+            {page === 'audit' && (
+              <AuditLogPage log={auditLog} />
+            )}
+            {page === 'errors' && (
+              <ErrorStatesPage />
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

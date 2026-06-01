@@ -1,0 +1,55 @@
+{
+  "subrogation_likely": false,
+  "confidence": 0.3,
+  "thesis": "A single-vehicle DUI is the likely proximate cause of loss; the repair shop's unverified 'stuck throttle' remark does not support a manufacturer subrogation theory.",
+  "confidence_tier": "LOW",
+  "third_party": {
+    "identified": false,
+    "name": null,
+    "type": "unknown",
+    "carrier_or_insurer": null
+  },
+  "supporting_evidence": [
+    {
+      "source": "Adjuster Notes",
+      "quote": "the throttle pedal feels stuck when pressed. Could be a recall issue, have seen similar on this model.",
+      "claim": "The only potential third-party theory — a manufacturer defect — and it is an unverified repair-shop hypothesis."
+    }
+  ],
+  "contradicting_evidence": [
+    {
+      "source": "Police Report CHP-2026-44102",
+      "quote": "Officer Singh observed slurred speech, odor of alcohol on driver's breath.",
+      "claim": "Officer's contemporaneous observations point to driver impairment as the cause."
+    },
+    {
+      "source": "Police Report CHP-2026-44102",
+      "quote": "Driver cited for suspected DUI.",
+      "claim": "The driver was cited for DUI, an intervening cause that likely bars recovery."
+    },
+    {
+      "source": "FNOL Narrative",
+      "quote": "Romero refused field sobriety at scene.",
+      "claim": "Refusal of field sobriety testing further supports the impairment theory."
+    }
+  ],
+  "estimated_recovery_usd": null,
+  "estimated_recovery_basis": "No recoverable third-party theory is established; the manufacturer-defect angle is unverified and speculative.",
+  "statute_of_limitations": {
+    "state": "CA",
+    "years_from_loss": 2,
+    "loss_date": "2026-05-25",
+    "expires": "2028-05-25"
+  },
+  "recommended_action": "REJECT",
+  "open_questions": [
+    "The BAC result is still pending from the San Mateo County blood draw.",
+    "The NHTSA recall database has not yet been checked for this model.",
+    "The repair shop's stuck-throttle observation needs independent inspection."
+  ],
+  "reviewer_warnings": [
+    "Single-vehicle DUI is an intervening cause that likely bars subrogation against a manufacturer in CA.",
+    "The manufacturer-defect angle is speculative — a repair-shop hypothesis with no NHTSA verification.",
+    "Do not name Toyota as a recovery target on this record."
+  ]
+}

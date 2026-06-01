@@ -1,0 +1,30 @@
+{
+  "claim_id": "CLM-2026-00481",
+  "line_of_business": "personal_auto",
+  "state": "OR",
+  "fnol_date": "2026-05-22",
+  "loss_date": "2026-05-21",
+  "paid_amount_usd": 8500,
+  "documents": [
+    {
+      "name": "FNOL Narrative",
+      "doc_type": "fnol",
+      "text": "Policyholder Sarah Chen reports she was stopped at a red light at the intersection of SE 39th Ave and SE Hawthorne Blvd in Portland, OR on May 21, 2026 at approximately 4:45 PM. A blue Toyota Camry struck her from behind. The driver of the Camry exited the vehicle, apologized, and provided his information: Marcus Rivera, insured by State Farm, policy SF-489201-A. Photos taken at the scene show rear bumper damage to her 2022 Honda Civic. Police were called and a report was filed. No injuries reported by either party. Estimated repair $8,500."
+    },
+    {
+      "name": "Police Report PDX-2026-7741",
+      "doc_type": "police_report",
+      "text": "Portland Police Bureau Incident Report PDX-2026-7741. Date: May 21, 2026. Time: 16:47. Location: SE 39th Ave and SE Hawthorne Blvd. Officer Reyes responding. Driver 1: Sarah Chen, 2022 Honda Civic, OR plate 884-JFK. Driver 2: Marcus Rivera, 2019 Toyota Camry, OR plate 219-MKL. Marcus Rivera stated 'I was looking at my phone and didn't see her stop.' Rivera cited for following too closely and inattentive driving. No injuries on scene. Both vehicles driveable; Chen's vehicle had moderate rear bumper damage."
+    },
+    {
+      "name": "Witness Statement: Patricia Hwang",
+      "doc_type": "witness_statement",
+      "text": "I was walking on the southwest corner of SE 39th and Hawthorne when I heard the impact. The Honda was stopped at the red light. The Camry behind her rolled into her without braking. I gave my contact info to the police. Patricia Hwang, 503-555-0142."
+    },
+    {
+      "name": "Repair Estimate: Hawthorne Auto Body",
+      "doc_type": "repair_estimate",
+      "text": "Hawthorne Auto Body. Vehicle: 2022 Honda Civic, VIN 19XFC2F69NE000482. Damage: rear bumper cover, rear bumper reinforcement, rear panel dent, tail light assembly (left). Parts and labor: $8,500.00. Estimator: J. Tran."
+    }
+  ]
+}

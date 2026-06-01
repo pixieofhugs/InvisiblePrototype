@@ -1,0 +1,12 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+anthropic>=0.40
+pydantic>=2.5
+python-dotenv>=1.0
+
+# "Drop a claim" makes a LIVE Anthropic call when ANTHROPIC_API_KEY is set, and
+# falls back to a deterministic simulated assessment when it isn't (or on error).
+
+# Dev / build-time only:
+json5>=0.9      # used by scripts/convert_seed (Python fallback); Node converter is primary
+pytest>=8.0     # reshape.py unit tests

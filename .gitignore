@@ -1,0 +1,19 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.pytest_cache/
+
+# Live demo state (created at runtime from data/seed/)
+data/state/
+
+# Node (only used by the build-time seed converter)
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db

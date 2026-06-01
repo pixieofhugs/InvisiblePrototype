@@ -1,0 +1,30 @@
+{
+  "claim_id": "CLM-2026-00492",
+  "line_of_business": "general_liability",
+  "state": "WA",
+  "fnol_date": "2026-05-24",
+  "loss_date": "2026-05-23",
+  "paid_amount_usd": 14200,
+  "documents": [
+    {
+      "name": "FNOL Narrative",
+      "doc_type": "fnol",
+      "text": "Policyholder is Brewline Coffee Roasters, Seattle WA. Customer Elena Park reports she slipped and fell on the floor of the Capitol Hill location on May 23, 2026 around 2:15 PM, sustaining a left wrist fracture and bruising. Park states the floor was wet and she did not see a wet floor sign. Medical treatment at Swedish ED. Initial bill $14,200. Brewline staff state the floor had been mopped by the cleaning service approximately 30 minutes prior. No incident report was filed by Brewline at the time."
+    },
+    {
+      "name": "Initial Witness Statement: Brewline Barista Maya Olsen",
+      "doc_type": "witness_statement",
+      "text": "I was making drinks when I heard a customer fall near the counter. I went over and helped her sit up. She said her wrist hurt. The floor was a little wet near where she fell. Our cleaners had been in earlier, maybe 30 or 40 minutes before. I don't know if they put out a sign. There usually is a sign but I didn't see one then."
+    },
+    {
+      "name": "Adjuster Notes",
+      "doc_type": "adjuster_notes",
+      "text": "Spoke with Brewline store manager Devin Wallace. Brewline contracts cleaning to Pacific Cleaning Services (Lynnwood WA). Pacific's contract is on file. Wallace believes Pacific's protocol requires wet floor signage but has no record of who signed off on May 23. No police report was filed. No video footage; the security camera near the counter was non-operational at the time."
+    },
+    {
+      "name": "Medical Record Summary",
+      "doc_type": "medical_record",
+      "text": "Swedish Capitol Hill ED. Patient: Elena Park, DOB 1989-11-04. Chief complaint: left wrist pain after slip and fall. Imaging: distal radius fracture, non-displaced. Splint applied, ortho follow-up scheduled. Discharge medications: ibuprofen, acetaminophen."
+    }
+  ]
+}

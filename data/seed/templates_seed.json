@@ -1,0 +1,228 @@
+{
+  "straightforward": {
+    "id": "CLM-2026-00488",
+    "confidence": 0.92,
+    "tier": "HIGH",
+    "lob": "Personal auto",
+    "fnolRelative": "Just now",
+    "recovery": 8500,
+    "recoveryBasis": "Repair + rental (estimated from FNOL)",
+    "solDate": "2028-05-29",
+    "solUrgent": false,
+    "solDays": 730,
+    "solState": "OR",
+    "thesis": "Named third party rear-ended insured at a controlled intersection. Citations issued; third party made verbal admission of fault at scene.",
+    "action": "ROUTE_TO_DEMAND",
+    "status": "pending",
+    "thirdParty": {
+      "name": "Dale Fenton",
+      "type": "Named driver",
+      "carrier": "Summit Casualty Group",
+      "identified": true
+    },
+    "evidence": [
+      {
+        "id": 1,
+        "docKey": "FNOL",
+        "source": "FNOL",
+        "quote": "Third party was issued a citation for failure to stop at a red light. He stated to the responding officer: \"I didn't see it in time.\"",
+        "claim": "Third party received citation and made a spontaneous admission of fault at scene."
+      },
+      {
+        "id": 2,
+        "docKey": "FNOL",
+        "source": "FNOL",
+        "quote": "Insured vehicle was at a complete stop for approximately 5–8 seconds prior to impact. Estimated impact speed 25–30 MPH.",
+        "claim": "Confirms insured was stationary — no basis for comparative fault."
+      }
+    ],
+    "contradicting": [],
+    "warnings": [],
+    "openQuestions": [
+      "Request formal repair estimate from authorized shop."
+    ],
+    "docs": {
+      "FNOL": {
+        "parts": [
+          {
+            "t": "text",
+            "v": "FNOL on file. Personal auto rear-end collision, 05/29/2026."
+          }
+        ]
+      }
+    },
+    "auditTrail": [
+      {
+        "ts": "2026-05-29 09:41 UTC",
+        "type": "model_run",
+        "modelVersion": "claude-opus-4",
+        "confidence": 0.92,
+        "detail": "Flagged: ROUTE TO DEMAND LETTER"
+      }
+    ]
+  },
+  "ambiguous": {
+    "id": "CLM-2026-00489",
+    "confidence": 0.58,
+    "tier": "MEDIUM",
+    "lob": "General liability",
+    "fnolRelative": "Just now",
+    "recovery": 4200,
+    "recoveryBasis": "Medical + lost wages (estimated)",
+    "solDate": "2027-05-29",
+    "solUrgent": false,
+    "solDays": 365,
+    "solState": "WA",
+    "thesis": "Slip-and-fall on premises maintained by an unidentified subcontractor. Property owner acknowledges contractor responsibility but cannot name the party. Subrogation is plausible but unactionable without contractor identification.",
+    "action": "GATHER_MORE_INFO",
+    "status": "pending",
+    "thirdParty": {
+      "name": "[Unconfirmed]",
+      "type": "Contractor (unverified)",
+      "carrier": "[Unknown]",
+      "identified": false
+    },
+    "evidence": [
+      {
+        "id": 1,
+        "docKey": "FNOL",
+        "source": "FNOL",
+        "quote": "\"That section of walkway is handled by our contractor, not us. They come every other week.\"",
+        "claim": "Property owner verbally attributes maintenance responsibility to a third-party contractor, supporting subrogation theory."
+      }
+    ],
+    "contradicting": [
+      {
+        "id": "C1",
+        "docKey": "FNOL",
+        "source": "FNOL",
+        "quote": "Building management could not produce a written maintenance contract or provide the contractor's name when pressed.",
+        "claim": "Without a named party and verified insurer, a subrogation demand cannot be issued."
+      }
+    ],
+    "warnings": [
+      "Subrogation demand cannot be issued without a named, insured third party."
+    ],
+    "openQuestions": [
+      "Identify the maintenance contractor by name and liability insurer.",
+      "Obtain written or email record of maintenance arrangement."
+    ],
+    "docs": {
+      "FNOL": {
+        "parts": [
+          {
+            "t": "text",
+            "v": "FNOL on file. General liability slip-and-fall, 05/29/2026."
+          }
+        ]
+      }
+    },
+    "auditTrail": [
+      {
+        "ts": "2026-05-29 09:41 UTC",
+        "type": "model_run",
+        "modelVersion": "claude-opus-4",
+        "confidence": 0.58,
+        "detail": "Flagged: GATHER MORE INFO"
+      }
+    ]
+  },
+  "failure": {
+    "id": "CLM-2026-00490",
+    "confidence": 0.29,
+    "tier": "LOW",
+    "lob": "Personal auto",
+    "fnolRelative": "Just now",
+    "recovery": 7100,
+    "recoveryBasis": "Product liability (unsubstantiated)",
+    "solDate": "2026-09-15",
+    "solUrgent": false,
+    "solDays": 109,
+    "solState": "CA",
+    "thesis": "Single-vehicle DUI. Attorney asserts sudden unintended acceleration by manufacturer; ECU data and officer narrative directly contradict. This assessment cannot support a subrogation demand.",
+    "action": "REJECT",
+    "status": "pending",
+    "thirdParty": {
+      "name": "Kia Motors America",
+      "type": "Manufacturer (alleged)",
+      "carrier": "[Unknown — litigation required]",
+      "identified": false
+    },
+    "evidence": [
+      {
+        "id": 1,
+        "docKey": "Attorney Letter",
+        "source": "Attorney Letter",
+        "quote": "Our client maintains that the vehicle accelerated without driver input immediately before the collision — a pattern previously reported in this model year.",
+        "claim": "Attorney asserts sudden unintended acceleration as proximate cause of loss."
+      }
+    ],
+    "contradicting": [
+      {
+        "id": "C1",
+        "docKey": "Police Report",
+        "source": "Police Report",
+        "quote": "Driver BAC was 0.19% at scene. Vehicle path consistent with impaired driving across two lanes before impact with barrier. No skid marks or evasive action detected.",
+        "claim": "Officer attributes cause to DUI, not mechanical failure."
+      },
+      {
+        "id": "C2",
+        "docKey": "ECU Report",
+        "source": "ECU Report",
+        "quote": "Throttle position sensor normal throughout event window. No fault codes. Brakes not applied in the 6 seconds before impact. No anomalous acceleration event recorded.",
+        "claim": "Vehicle electronics provide no support for sudden unintended acceleration."
+      }
+    ],
+    "warnings": [
+      "Primary cause of record is DUI (Vehicle Code 23152) — manufacturer liability is attorney-constructed post-citation.",
+      "ECU data directly refutes the unintended acceleration theory.",
+      "Filing a demand without supporting evidence risks bad-faith exposure and a counterclaim."
+    ],
+    "openQuestions": [
+      "Has this attorney filed prior SUA claims against this vehicle model?"
+    ],
+    "docs": {
+      "FNOL": {
+        "parts": [
+          {
+            "t": "text",
+            "v": "FNOL on file. Single-vehicle accident, 05/29/2026."
+          }
+        ]
+      },
+      "Police Report": {
+        "parts": [
+          {
+            "t": "text",
+            "v": "Police report on file. DUI citation issued."
+          }
+        ]
+      },
+      "ECU Report": {
+        "parts": [
+          {
+            "t": "text",
+            "v": "ECU report on file. No fault codes detected."
+          }
+        ]
+      },
+      "Attorney Letter": {
+        "parts": [
+          {
+            "t": "text",
+            "v": "Attorney representation notice on file."
+          }
+        ]
+      }
+    },
+    "auditTrail": [
+      {
+        "ts": "2026-05-29 09:41 UTC",
+        "type": "model_run",
+        "modelVersion": "claude-opus-4",
+        "confidence": 0.29,
+        "detail": "Flagged: REJECT — low subrogation confidence"
+      }
+    ]
+  }
+}

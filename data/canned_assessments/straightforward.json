@@ -1,0 +1,46 @@
+{
+  "subrogation_likely": true,
+  "confidence": 0.92,
+  "confidence_tier": "HIGH",
+  "thesis": "Marcus Rivera rear-ended the stopped insured and admitted inattention at the scene; his carrier State Farm is a clean recovery target.",
+  "third_party": {
+    "identified": true,
+    "name": "Marcus Rivera",
+    "type": "individual",
+    "carrier_or_insurer": "State Farm (policy SF-489201-A)"
+  },
+  "supporting_evidence": [
+    {
+      "source": "FNOL Narrative",
+      "quote": "A blue Toyota Camry struck her from behind.",
+      "claim": "Establishes a rear-end impact on the stationary insured vehicle."
+    },
+    {
+      "source": "Police Report PDX-2026-7741",
+      "quote": "Marcus Rivera stated 'I was looking at my phone and didn't see her stop.'",
+      "claim": "Third party made a spontaneous admission of inattention to the responding officer."
+    },
+    {
+      "source": "Police Report PDX-2026-7741",
+      "quote": "Rivera cited for following too closely and inattentive driving.",
+      "claim": "Officer issued citations confirming third-party fault."
+    },
+    {
+      "source": "Witness Statement: Patricia Hwang",
+      "quote": "The Camry behind her rolled into her without braking.",
+      "claim": "Independent witness corroborates that the third party failed to brake."
+    }
+  ],
+  "contradicting_evidence": [],
+  "estimated_recovery_usd": 8500,
+  "estimated_recovery_basis": "Authorized repair estimate of $8,500.00 from Hawthorne Auto Body.",
+  "statute_of_limitations": {
+    "state": "OR",
+    "years_from_loss": 2,
+    "loss_date": "2026-05-21",
+    "expires": "2028-05-21"
+  },
+  "recommended_action": "ROUTE_TO_DEMAND_LETTER",
+  "open_questions": [],
+  "reviewer_warnings": []
+}

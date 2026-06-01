@@ -1,0 +1,152 @@
+[
+  {
+    "ts": "2026-05-29 09:16 UTC",
+    "claimId": "CLM-2026-00481",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "ROUTE TO DEMAND LETTER",
+    "confidence": 0.92,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-29 09:15 UTC",
+    "claimId": "CLM-2026-00481",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "FNOL submitted",
+    "confidence": null,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-28 17:22 UTC",
+    "claimId": "CLM-2026-00467",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "ROUTE TO DEMAND LETTER",
+    "confidence": 0.91,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-25 09:00 UTC",
+    "claimId": "CLM-2026-00467",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "FNOL submitted",
+    "confidence": null,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-18 16:01 UTC",
+    "claimId": "CLM-2026-00445",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "GATHER MORE INFO",
+    "confidence": 0.71,
+    "notes": "Multi-vehicle fault split unresolved"
+  },
+  {
+    "ts": "2026-05-18 16:00 UTC",
+    "claimId": "CLM-2026-00445",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "FNOL submitted",
+    "confidence": null,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-15 11:01 UTC",
+    "claimId": "CLM-2026-00412",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "GATHER MORE INFO",
+    "confidence": 0.62,
+    "notes": "Contractor identity unconfirmed"
+  },
+  {
+    "ts": "2026-05-15 11:00 UTC",
+    "claimId": "CLM-2026-00412",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "FNOL submitted",
+    "confidence": null,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-13 08:30 UTC",
+    "claimId": "CLM-2026-00355",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "REJECT",
+    "confidence": 0.34,
+    "notes": "DUI primary; defect theory unsupported by ECU"
+  },
+  {
+    "ts": "2026-05-12 09:00 UTC",
+    "claimId": "CLM-2026-00355",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "Attorney notice received",
+    "confidence": null,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-10 14:31 UTC",
+    "claimId": "CLM-2026-00389",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "ROUTE TO DEMAND LETTER",
+    "confidence": 0.87,
+    "notes": ""
+  },
+  {
+    "ts": "2026-05-10 14:30 UTC",
+    "claimId": "CLM-2026-00389",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "FNOL submitted",
+    "confidence": null,
+    "notes": ""
+  },
+  {
+    "ts": "2026-04-22 10:14 UTC",
+    "claimId": "CLM-2026-00290",
+    "type": "reviewer_action",
+    "modelVersion": "",
+    "reviewer": "Molly Shove",
+    "action": "CONFIRMED — ROUTED TO DEMAND LETTER",
+    "confidence": null,
+    "notes": "Clean liability. Proceeding."
+  },
+  {
+    "ts": "2026-04-21 11:01 UTC",
+    "claimId": "CLM-2026-00290",
+    "type": "model_run",
+    "modelVersion": "claude-opus-4",
+    "reviewer": "",
+    "action": "ROUTE TO DEMAND LETTER",
+    "confidence": 0.89,
+    "notes": ""
+  },
+  {
+    "ts": "2026-04-21 11:00 UTC",
+    "claimId": "CLM-2026-00290",
+    "type": "claim_received",
+    "modelVersion": "",
+    "reviewer": "",
+    "action": "FNOL submitted",
+    "confidence": null,
+    "notes": ""
+  }
+]

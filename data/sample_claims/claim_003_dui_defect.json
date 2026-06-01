@@ -1,0 +1,25 @@
+{
+  "claim_id": "CLM-2026-00510",
+  "line_of_business": "personal_auto",
+  "state": "CA",
+  "fnol_date": "2026-05-26",
+  "loss_date": "2026-05-25",
+  "paid_amount_usd": 22400,
+  "documents": [
+    {
+      "name": "FNOL Narrative",
+      "doc_type": "fnol",
+      "text": "Policyholder Daniel Romero reports a single-vehicle accident on Highway 1 near Half Moon Bay, CA on May 25, 2026 at approximately 11:30 PM. Romero states he was driving home and the vehicle 'lost control,' striking the guardrail and totaling the front end. No other vehicle involved. Romero refused field sobriety at scene. Vehicle is a 2023 Toyota Camry."
+    },
+    {
+      "name": "Police Report CHP-2026-44102",
+      "doc_type": "police_report",
+      "text": "California Highway Patrol Report CHP-2026-44102. Date: May 25, 2026. Time: 23:34. Driver: Daniel Romero. Single-vehicle collision with guardrail. Officer Singh observed slurred speech, odor of alcohol on driver's breath. Driver refused PAS and field sobriety. Driver transported and blood draw performed at San Mateo County hospital. BAC pending. Driver cited for suspected DUI."
+    },
+    {
+      "name": "Adjuster Notes",
+      "doc_type": "adjuster_notes",
+      "text": "Vehicle towed to Coastside Auto Repair. Initial repair quote $22,400. Shop technician Ramon Diaz noted 'the throttle pedal feels stuck when pressed. Could be a recall issue, have seen similar on this model.' Vehicle is 2023 Toyota Camry. Adjuster has not yet checked NHTSA recall database. Romero's prior driving record: two speeding citations in past three years, no DUI priors."
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "subrogation_likely": true,
+  "confidence": 0.62,
+  "confidence_tier": "MEDIUM",
+  "thesis": "Pacific Cleaning Services may bear premises-maintenance liability for the wet floor, but the party is not yet confirmed and its insurer is unknown.",
+  "third_party": {
+    "identified": false,
+    "name": "Pacific Cleaning Services",
+    "type": "company",
+    "carrier_or_insurer": null
+  },
+  "supporting_evidence": [
+    {
+      "source": "FNOL Narrative",
+      "quote": "Park states the floor was wet and she did not see a wet floor sign.",
+      "claim": "Claimant alleges a wet floor with no warning signage at the time of loss."
+    },
+    {
+      "source": "Adjuster Notes",
+      "quote": "Brewline contracts cleaning to Pacific Cleaning Services (Lynnwood WA).",
+      "claim": "Identifies a third-party contractor potentially responsible for floor maintenance."
+    },
+    {
+      "source": "Initial Witness Statement: Brewline Barista Maya Olsen",
+      "quote": "I didn't see one then.",
+      "claim": "Employee witness did not observe a wet-floor sign in place after the cleaning."
+    }
+  ],
+  "contradicting_evidence": [
+    {
+      "source": "Initial Witness Statement: Brewline Barista Maya Olsen",
+      "quote": "The floor was a little wet near where she fell.",
+      "claim": "Witness describes only a small amount of water and did not directly confirm the signage was absent."
+    },
+    {
+      "source": "Adjuster Notes",
+      "quote": "No video footage; the security camera near the counter was non-operational at the time.",
+      "claim": "No objective record of the floor condition or signage exists."
+    }
+  ],
+  "estimated_recovery_usd": 14200,
+  "estimated_recovery_basis": "Initial Swedish ED bill of $14,200; future treatment may increase exposure.",
+  "statute_of_limitations": {
+    "state": "WA",
+    "years_from_loss": 3,
+    "loss_date": "2026-05-23",
+    "expires": "2029-05-23"
+  },
+  "recommended_action": "GATHER_MORE_INFO",
+  "open_questions": [
+    "Obtain Pacific Cleaning Services' certificate of insurance and liability carrier.",
+    "Confirm whether Pacific had wet-floor signage out at the time of the fall.",
+    "Determine whether Brewline's contract with Pacific contains a hold-harmless clause.",
+    "Verify the time gap between the mopping and the fall."
+  ],
+  "reviewer_warnings": [
+    "WA is a pure comparative-negligence state; the claimant's own care may reduce recovery.",
+    "The third party's liability insurer is unknown — confirm coverage before issuing a demand."
+  ]
+}
