@@ -14,6 +14,7 @@ stamped into the audit log as the prompt version.
 import os
 import json
 import hashlib
+from functools import lru_cache
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -36,10 +37,13 @@ def has_api_key() -> bool:
     return bool(os.environ.get("ANTHROPIC_API_KEY"))
 
 
+@lru_cache(maxsize=1)
 def load_system_prompt() -> str:
+    # cached: the prompt file doesn't change at runtime, so we read it once.
     return PROMPT_PATH.read_text(encoding="utf-8")
 
 
+@lru_cache(maxsize=1)
 def prompt_version() -> str:
     """Short SHA1 of the system prompt — stamped into the audit log."""
     digest = hashlib.sha1(load_system_prompt().encode("utf-8")).hexdigest()

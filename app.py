@@ -1,9 +1,10 @@
 """FastAPI backend for the Subrogation Opportunity Scout.
 
 Serves the zero-build React front-end from web/ (same origin -> no CORS) and exposes
-a small JSON API. "Drop a claim" runs a real Anthropic call on one of the spec's
-sample claims and reshapes the result for the UI; if the API key is missing or the
-call fails, it falls back to the canned mock template.
+a small JSON API. "Drop a claim" runs a live Anthropic call on one of the spec's
+sample claims and reshapes the result for the UI; if the API key is missing or any
+step fails, it degrades to a deterministic simulated assessment, and finally to the
+seed template — so the endpoint never 500s.
 
 Run:  python -m uvicorn app:app --port 8000 --workers 1
 """
@@ -15,6 +16,7 @@ import copy
 import json
 import logging
 from pathlib import Path
+from typing import Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
@@ -54,7 +56,9 @@ class AnalyzeBody(BaseModel):
 
 
 class ActionBody(BaseModel):
-    decision: str
+    # constrained so an unknown decision returns 422 instead of being written as a
+    # bogus claim status and mislabeled in the audit log.
+    decision: Literal["confirmed", "gather", "rejected", "deferred"]
     notes: str = ""
     reviewerName: str = "Molly Shove"
 
@@ -81,39 +85,57 @@ async def api_analyze(body: AnalyzeBody):
     new_id = store.next_claim_id()
     warning: str | None = None
 
-    # Prefer a LIVE Anthropic call when a key is configured; on any failure (or no key),
-    # fall back to the deterministic simulated assessment so the demo never breaks.
+    # Obtain an assessment: prefer a LIVE Anthropic call when a key is configured;
+    # otherwise (or on any failure) use the deterministic simulated assessment.
+    # Every branch is guarded so the endpoint can always degrade to the seed template
+    # rather than 500 — "the demo never breaks".
+    assessment = None
+    model_version = "seed-template"
+    source = "simulated"
+
     if llm.has_api_key():
         try:
             assessment, model_version = await asyncio.to_thread(llm.assess_claim, claim)
             source = "live"
         except Exception as exc:
             log.exception("Live assessment failed; falling back to simulated")
+            warning = f"Live model call failed ({type(exc).__name__}); showing a simulated assessment."
+
+    if assessment is None:
+        # Pure-simulated path gets a short non-blocking delay so the spinner reads
+        # naturally; the live-failure path already spent real latency.
+        if source != "live" and warning is None:
             await asyncio.sleep(SIMULATED_LATENCY_S)
+        try:
             assessment, model_version = llm.simulate_assessment(template)
             source = "simulated"
-            warning = f"Live model call failed ({type(exc).__name__}); showing a simulated assessment."
-    else:
-        # No key: simulate, with a short non-blocking delay so the spinner reads naturally.
-        await asyncio.sleep(SIMULATED_LATENCY_S)
-        assessment, model_version = llm.simulate_assessment(template)
-        source = "simulated"
+        except Exception as exc:
+            log.exception("Simulated assessment unavailable; falling back to seed template")
+            assessment = None
+            warning = ((warning + " ") if warning else "") + \
+                f"Simulated assessment unavailable ({type(exc).__name__}); used the seed template."
 
-    try:
-        claim_dict = assessment_to_claim(
-            claim, assessment,
-            model_version=model_version, now=store.now_utc(),
-            claim_id_override=new_id,
-        )
-    except Exception as exc:  # extremely defensive — reshape should not fail on validated data
-        log.exception("Reshape failed; falling back to seed template")
+    claim_dict = None
+    if assessment is not None:
+        try:
+            claim_dict = assessment_to_claim(
+                claim, assessment,
+                model_version=model_version, now=store.now_utc(),
+                claim_id_override=new_id,
+            )
+        except Exception as exc:  # extremely defensive — reshape should not fail on validated data
+            log.exception("Reshape failed; falling back to seed template")
+            warning = ((warning + " ") if warning else "") + \
+                f"Reshape failed ({type(exc).__name__}); used the seed template."
+
+    if claim_dict is None:
         claim_dict = copy.deepcopy(_templates[template])
         claim_dict["id"] = new_id
         claim_dict["fnolRelative"] = "Just now"
         model_version = "seed-template"
-        warning = f"Reshape failed ({type(exc).__name__}); used the seed template."
 
-    store.add_claim(claim_dict, model_version=model_version, source=source)
+    store.add_claim(claim_dict, model_version=model_version, source=source,
+                    prompt_version=llm.prompt_version())
     return {"claim": claim_dict, "source": source, "warning": warning}
 
 

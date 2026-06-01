@@ -77,7 +77,10 @@ function ClaimCard({ claim, onOpen, isNew }) {
 
   const confirmed = claim.status === 'confirmed';
   const rejected  = claim.status === 'rejected';
-  const actioned  = confirmed || rejected;
+  const deferred  = claim.status === 'deferred';
+  const gathered  = claim.status === 'gather';
+  const terminal  = confirmed || rejected;            // strike-through only when closed
+  const actioned  = terminal || deferred || gathered; // mute + badge for any decision
 
   return (
     <div
@@ -108,7 +111,7 @@ function ClaimCard({ claim, onOpen, isNew }) {
         <div style={{
           fontSize: '13px', fontFamily: "'JetBrains Mono', monospace",
           color: actioned ? '#9CA3AF' : '#1F2937', fontWeight: '500',
-          textDecoration: actioned ? 'line-through' : 'none',
+          textDecoration: terminal ? 'line-through' : 'none',
         }}>
           {claim.id}
         </div>
@@ -119,8 +122,8 @@ function ClaimCard({ claim, onOpen, isNew }) {
           {claim.fnolRelative}
         </div>
         {actioned && (
-          <div style={{ fontSize: '10px', fontWeight: '600', color: confirmed ? '#047857' : '#B91C1C', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            {confirmed ? '✓ Confirmed' : '✗ Rejected'}
+          <div style={{ fontSize: '10px', fontWeight: '600', color: confirmed ? '#047857' : rejected ? '#B91C1C' : '#6B7280', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            {confirmed ? '✓ Confirmed' : rejected ? '✗ Rejected' : deferred ? '→ Deferred' : '↗ Info requested'}
           </div>
         )}
       </div>
@@ -202,7 +205,7 @@ function DropClaimModal({ onClose, onAdd }) {
     // Floor the spinner so an instant mock doesn't flash.
     const wait = Math.max(0, 500 - (Date.now() - started));
     setTimeout(() => {
-      onAdd({ ...claim, _isNew: true });
+      onAdd(claim);  // new-claim glow is driven by QueuePage's newIds set, keyed on claim.id
       setStatus('done');
       setTimeout(onClose, 600);
     }, wait);

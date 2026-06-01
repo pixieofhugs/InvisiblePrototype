@@ -523,8 +523,7 @@ function ClaimDetailPage({ claim, onBack, onAction, onUndoAction }) {
   const [activeDoc, setActiveDoc] = useState(docKeys[0] || 'FNOL');
   const [activeEvId, setActiveEvId] = useState(null);
   const [actionTaken, setActionTaken] = useState(
-    claim.status === 'confirmed' ? 'confirmed' :
-    claim.status === 'rejected'  ? 'rejected'  : null
+    ['confirmed', 'rejected', 'deferred', 'gather'].includes(claim.status) ? claim.status : null
   );
 
   const handleAction = (claimId, notes, decision, reviewerName) => {

@@ -10,6 +10,7 @@ so behavior is identical whether state lives in the browser or on disk.
 
 from __future__ import annotations
 
+import copy
 import json
 import os
 import re
@@ -20,7 +21,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 SEED_DIR = ROOT / "data" / "seed"
-STATE_DIR = ROOT / "data" / "state"
+# Override with SUBRO_STATE_DIR so tests can use an isolated dir and never clobber
+# a running server's live state.
+STATE_DIR = Path(os.environ.get("SUBRO_STATE_DIR") or (ROOT / "data" / "state"))
 CLAIMS_STATE = STATE_DIR / "claims.json"
 AUDIT_STATE = STATE_DIR / "audit_log.json"
 CLAIMS_SEED = SEED_DIR / "claims_seed.json"
@@ -77,12 +80,18 @@ def _persist() -> None:
     _atomic_write(AUDIT_STATE, _audit)
 
 
+def _snapshot() -> dict:
+    """Deep copy of the live state, so callers can't mutate the canonical store and
+    FastAPI can serialize a stable copy after the lock is released."""
+    return {"claims": copy.deepcopy(_claims), "auditLog": copy.deepcopy(_audit)}
+
+
 # ---- public API -----------------------------------------------------------
 
 def get_state() -> dict:
     with _LOCK:
         _ensure_loaded()
-        return {"claims": _claims, "auditLog": _audit}
+        return _snapshot()
 
 
 def next_claim_id() -> str:
@@ -101,7 +110,7 @@ def next_claim_id() -> str:
         return f"CLM-{year}-{best + 1:05d}"
 
 
-def add_claim(claim: dict, *, model_version: str, source: str) -> dict:
+def add_claim(claim: dict, *, model_version: str, source: str, prompt_version: str = "") -> dict:
     """Prepend a freshly-analyzed claim + its two global audit rows (mirrors App.addClaim)."""
     from reshape import ACTION_LABEL  # local import to avoid a cycle at module load
     with _LOCK:
@@ -111,6 +120,8 @@ def add_claim(claim: dict, *, model_version: str, source: str) -> dict:
         _claims.insert(0, claim)
         action_label = ACTION_LABEL.get(claim.get("action", ""), claim.get("action", ""))
         note = {"live": "live model run", "simulated": "simulated model run"}.get(source, f"{source} assessment")
+        if prompt_version:
+            note = f"{note} · prompt {prompt_version}"
         _audit.insert(0, {
             "ts": ts, "claimId": claim["id"], "type": "model_run",
             "modelVersion": model_version, "reviewer": "",
@@ -122,7 +133,7 @@ def add_claim(claim: dict, *, model_version: str, source: str) -> dict:
             "action": "FNOL submitted", "confidence": None, "notes": "",
         })
         _persist()
-        return {"claims": _claims, "auditLog": _audit}
+        return _snapshot()
 
 
 def _find(claim_id: str) -> dict | None:
@@ -153,7 +164,7 @@ def apply_action(claim_id: str, decision: str, notes: str, reviewer_name: str) -
             "action": label, "confidence": None, "notes": notes,
         })
         _persist()
-        return {"claim": claim, "auditLog": _audit}
+        return {"claim": copy.deepcopy(claim), "auditLog": copy.deepcopy(_audit)}
 
 
 def undo_action(claim_id: str, reviewer_name: str = "Molly Shove") -> dict:
@@ -177,7 +188,7 @@ def undo_action(claim_id: str, reviewer_name: str = "Molly Shove") -> dict:
             "notes": "Reviewer changed assessment.",
         })
         _persist()
-        return {"claim": claim, "auditLog": _audit}
+        return {"claim": copy.deepcopy(claim), "auditLog": copy.deepcopy(_audit)}
 
 
 def reset() -> dict:
@@ -189,4 +200,4 @@ def reset() -> dict:
         shutil.copyfile(AUDIT_SEED, AUDIT_STATE)
         _claims = _read_json(CLAIMS_STATE)
         _audit = _read_json(AUDIT_STATE)
-        return {"claims": _claims, "auditLog": _audit}
+        return _snapshot()

@@ -1,20 +1,29 @@
-"""Manual backend smoke test (no live key needed). Run: python tests/smoke_api.py"""
+"""Manual backend smoke test (no live key needed). Run: python tests/smoke_api.py
+
+Exercises the SIMULATED path in an ISOLATED state dir, so it never makes a live API
+call and never touches a running server's data/state.
+"""
 import os
 import sys
 import shutil
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-# ensure a clean, key-free run so we exercise the mock fallback path
-os.environ.pop("ANTHROPIC_API_KEY", None)
-state_dir = ROOT / "data" / "state"
-if state_dir.exists():
-    shutil.rmtree(state_dir)
+# Isolate state to a throwaway dir BEFORE importing the app (store reads SUBRO_STATE_DIR
+# at import time), so we never delete/clobber a running server's live state.
+_tmp_state = Path(tempfile.mkdtemp(prefix="subro_smoke_state_"))
+os.environ["SUBRO_STATE_DIR"] = str(_tmp_state)
 
 from fastapi.testclient import TestClient  # noqa: E402
+import llm  # noqa: E402
 import app as app_module  # noqa: E402
+
+# Force the simulated path. load_dotenv() in llm re-reads any real key from .env, so
+# popping the env var isn't enough — patch has_api_key directly.
+llm.has_api_key = lambda: False
 
 client = TestClient(app_module.app)
 
@@ -64,8 +73,8 @@ ru = client.post(f"/api/claims/{new_id}/undo", json={"reviewerName": "Molly Shov
 check("status pending", ru["claim"]["status"] == "pending")
 
 print("persistence: files written")
-check("claims.json exists", (state_dir / "claims.json").exists())
-check("audit_log.json exists", (state_dir / "audit_log.json").exists())
+check("claims.json exists", (_tmp_state / "claims.json").exists())
+check("audit_log.json exists", (_tmp_state / "audit_log.json").exists())
 
 print("POST /api/reset")
 rr = client.post("/api/reset").json()
@@ -77,4 +86,5 @@ root = client.get("/")
 check("index served", root.status_code == 200 and "Subrogation Opportunity Scout" in root.text)
 
 print("\nRESULT:", "FAILED" if check.failed else "ALL PASS")
+shutil.rmtree(_tmp_state, ignore_errors=True)  # teardown: remove the throwaway state dir
 sys.exit(1 if check.failed else 0)
